@@ -25,6 +25,14 @@ public class Account
 		name = _name;
 		login = _login;
 		password = _password;
+		// TODO: Set automatically an ID
+		//id = 
+	}
+	
+	public Account(String _login, String _password)
+	{
+		login = _login;
+		password = _password;
 	}
 	
 	public static void CreateAccount(Account newAccount)
