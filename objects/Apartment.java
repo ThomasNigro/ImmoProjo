@@ -7,6 +7,7 @@ public class Apartment
 	private String address;
 	private String desc;
 	private double price;
+	private double soldPrice;
 	private boolean isSold;
 	
 	public Type getType(){
@@ -39,6 +40,14 @@ public class Apartment
 
 	public void setSold(boolean isSold) {
 		this.isSold = isSold;
+	}
+
+	public double getSoldPrice() {
+		return soldPrice;
+	}
+
+	public void setSoldPrice(double soldPrice) {
+		this.soldPrice = soldPrice;
 	}
 	
 }
