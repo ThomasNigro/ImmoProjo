@@ -10,6 +10,14 @@ public class Apartment
 	private double soldPrice;
 	private boolean isSold;
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public Type getType(){
 		return type;
 	}
@@ -49,5 +57,6 @@ public class Apartment
 	public void setSoldPrice(double soldPrice) {
 		this.soldPrice = soldPrice;
 	}
+
 	
 }

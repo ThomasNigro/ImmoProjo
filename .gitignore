@@ -1,3 +1,10 @@
 /Test.class
 /AccountManager.class
 /AccountConnect.class
+/database.class
+/n.class
+/RechercheAppartParNum.class
+/InscriptionServlet.class
+/LoginServlet.class
+/MiseEnVenteServlet.class
+/RechAppartParNumServlet.class
