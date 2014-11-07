@@ -10,6 +10,17 @@ public class Apartment
 	private double soldPrice;
 	private boolean isSold;
 	
+	
+	public Apartment(Type t, String _address, String _desc, double _p){
+		assert(t!=null);
+		type = t;
+		address = _address;
+		desc = _desc;
+		price = _p;
+		isSold=false;
+	}
+
+	
 	public int getId() {
 		return id;
 	}
@@ -34,14 +45,6 @@ public class Apartment
 		return price;
 	}
 	
-	public Apartment(Type t, String _address, String _desc, double _p){
-		type = t;
-		address = _address;
-		desc = _desc;
-		price = _p;
-		isSold=false;
-	}
-
 	public boolean isSold() {
 		return isSold;
 	}
