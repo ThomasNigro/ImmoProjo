@@ -26,7 +26,7 @@ public class MiseEnVenteServlet extends HttpServlet {
 			default : type= null;
 		}
 		Apartment appart = new Apartment(type, adresse, desc, prix);
-		database.addApartment(appart, proprio.getId());
+		database.addApartment(appart);
 		
 	}
 }

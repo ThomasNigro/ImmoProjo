@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ public class LoginServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		HttpSession laSession = request.getSession(true);
+		//Cookie cookieLog= request.getCookies();
 		
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
@@ -31,6 +33,8 @@ public class LoginServlet extends HttpServlet {
 				String name = res.getString("name");
 				Account account= new Account (name, login, password);
 				laSession.setAttribute("Account", account);
+				Cookie cookieLogin= new Cookie("Login", login);
+				//request.addCookie(cookieLogin);
 				out.println("Compte OK");
 			}
 			else{
