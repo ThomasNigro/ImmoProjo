@@ -9,6 +9,7 @@ public class Apartment
 	private double price;
 	private double soldPrice;
 	private boolean isSold;
+	private String idProprio;
 	
 	
 	public Apartment(Type t, String _address, String _desc, double _p){
@@ -59,6 +60,16 @@ public class Apartment
 
 	public void setSoldPrice(double soldPrice) {
 		this.soldPrice = soldPrice;
+	}
+
+
+	public String getIdProprio() {
+		return idProprio;
+	}
+
+
+	public void setIdProprio(String idProprio) {
+		this.idProprio = idProprio;
 	}
 
 	
