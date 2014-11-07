@@ -8,3 +8,5 @@
 /LoginServlet.class
 /MiseEnVenteServlet.class
 /RechAppartParNumServlet.class
+/SupprAppartServlet.class
+datarepositories/database.java

@@ -1,12 +1,19 @@
 package objects;
 
+import java.util.ArrayList;
+
 public class Account 
 {
 	private int id;
 	private String name;
 	private String login;
 	private String password;
+	private ArrayList<Apartment> apparts = new ArrayList<Apartment>();
 	
+	public int getId() {
+		return id;
+	}
+
 	public String getName()
 	{
 		return name;
