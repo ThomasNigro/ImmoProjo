@@ -58,7 +58,7 @@ public class database
         }
         return resultat;
     }
-    public static void addApartment(Apartment apartment, int idProprio)
+    public static void addApartment(Apartment apartment, String idProprio)
     {	
         try 
         {

@@ -2,6 +2,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,17 +20,25 @@ public class LoginServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		HttpSession laSession = request.getSession(true);
-		Account account = (Account) laSession.getAttribute("Account");
 		
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
-		//if(account.getLogin()!=login || account.getPassword() != password)
 		String requete ="SELECT * FROM PROPRIETAIRES WHERE login="+login
 				+"AND password="+password;
-		if(database.query(requete) != null){
-			out.println("Compte OK");
-			//est qu'il faut creer un proprio par session ? 
-			//comment accéder un proprio existant ?
+		ResultSet res=database.query(requete);
+		try {
+			if(res != null || res.getString(1).isEmpty()){
+				String name = res.getString("name");
+				Account account= new Account (name, login, password);
+				laSession.setAttribute("Account", account);
+				out.println("Compte OK");
+			}
+			else{
+				out.println("Login inconnu ou Password incorrect");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

@@ -4,14 +4,13 @@ import java.util.ArrayList;
 
 public class Account 
 {
-	private int id;
 	private String name;
 	private String login;
 	private String password;
 	private ArrayList<Apartment> apparts = new ArrayList<Apartment>();
 	
-	public int getId() {
-		return id;
+	public String getId() {
+		return login;
 	}
 
 	public String getName()
@@ -36,11 +35,7 @@ public class Account
 		//id = 
 	}
 	
-	public Account(String _login, String _password)
-	{
-		login = _login;
-		password = _password;
-	}
+
 	
 	public static void CreateAccount(Account newAccount)
 	{
