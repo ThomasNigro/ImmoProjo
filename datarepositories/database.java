@@ -58,7 +58,7 @@ public class database
         }
         return resultat;
     }
-    public static void addApartment(Apartment apartment)
+    public static void addApartment(Apartment apartment, int idProprio)
     {	
         try 
         {
