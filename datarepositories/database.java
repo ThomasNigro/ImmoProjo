@@ -113,7 +113,7 @@ public class database
 		try
 		{
 			PreparedStatement preparedStatement = connection
-					.prepareStatement("INSERT INTO APARTMENT VALUES(?,?,?,?,?,?)");
+					.prepareStatement("INSERT INTO APPARTEMENTS VALUES(?,?,?,?,?,?)");
 			preparedStatement.setString(1, Integer.toString(apartment.getId()));
 			preparedStatement.setString(2,
 					Integer.toString(apartment.getType().ordinal()));
@@ -125,6 +125,30 @@ public class database
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	public static void getApartmentByOwner(String ownerLogin)
+	{
+		try
+		{
+			Statement stmt = connection.createStatement();
+			String getQuery = "SELECT * FROM APPARTEMENTS WHERE OwnerId = \'"
+					+ ownerLogin + "\';";
+			ResultSet rs = stmt.executeQuery(getQuery);
+			while(rs.next())
+			{
+		         int id = rs.getInt("Id");
+		         String desc = rs.getString("Description");
+		         double price = rs.getDouble("Price");
+		         double soldPrice = rs.getDouble("SoldPrice");
+		         boolean isSold = rs.getBoolean("IsSold");
+		         String adress = rs.getString("Adress");
+		         int type = rs.getInt("Type");
+			}
+		} catch (SQLException e)
+		{
+
 		}
 	}
 
