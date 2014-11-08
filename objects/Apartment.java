@@ -1,5 +1,7 @@
 package objects;
 
+
+
 public class Apartment 
 {
 	private int id;
@@ -10,16 +12,8 @@ public class Apartment
 	private double soldPrice;
 	private boolean isSold;
 	private String idProprio;
+
 	
-	public Apartment(int _id, String _desc, double _price, double _soldPrice, boolean _isSold, String _adress, int _type)
-	{
-		id = _id;
-		desc = _desc;
-		price = _price;
-		soldPrice = _soldPrice;
-		isSold = _isSold;
-		address = _adress;
-	}
 	
 	public Apartment(Type t, String _address, String _desc, double _p){
 		assert(t!=null);
