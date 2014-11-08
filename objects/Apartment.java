@@ -70,6 +70,7 @@ public class Apartment
 		return idProprio;
 	}
 
+
 	public void setIdProprio(String idProprio) {
 		this.idProprio = idProprio;
 	}

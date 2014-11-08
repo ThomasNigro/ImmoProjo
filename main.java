@@ -8,7 +8,7 @@ public class main {
 	public static void main(String[] args) {
 		Apartment nimportequoi = new Apartment(Type.STUDIO, "TESTST", "Bp,kpir", 2.1);
 		
-		database db = new database("truc.bd");
+		database db = new database("machin.bd");
 		db.connect();
 		db.createTables();
 		db.addApartment(nimportequoi);
