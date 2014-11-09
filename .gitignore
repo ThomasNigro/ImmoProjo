@@ -12,3 +12,5 @@
 datarepositories/database.java
 /main.class
 .classpath
+/DeclarerPrixVenteServlet.class
+/DeclarerVenduServlet.class

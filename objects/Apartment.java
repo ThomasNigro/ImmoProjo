@@ -25,6 +25,19 @@ public class Apartment
 	}
 
 	
+	public Apartment(Type _type, int idAppart, String idOwner, String _desc,
+			double _price, double _soldPrice, boolean _isSold, String _adress) {
+		// TODO Auto-generated constructor stub
+		type = _type;
+		address = _adress;
+		desc = _desc;
+		price = _price;
+		isSold=_isSold;
+		soldPrice=_soldPrice;
+		idProprio= idOwner;
+	}
+
+
 	public int getId() {
 		return id;
 	}

@@ -21,9 +21,19 @@
 			<locationURI>copy_PARENT/annonce.jsp</locationURI>
 		</link>
 		<link>
+			<name>login.jsp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/login.jsp</locationURI>
+		</link>
+		<link>
 			<name>studio.jsp</name>
 			<type>1</type>
 			<locationURI>copy_PARENT/studio.jsp</locationURI>
+		</link>
+		<link>
+			<name>vosApparts.jsp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/vosApparts.jsp</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>

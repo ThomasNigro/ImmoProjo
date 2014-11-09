@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import objects.Apartment;
+import objects.Type;
 
 public class database
 {
@@ -155,6 +156,50 @@ public class database
 			
 		} catch (SQLException e)
 		{
+			e.printStackTrace();
+		}
+	}
+
+	public Apartment getAppart(int idAppart) {
+		// TODO Auto-generated method stub
+		
+		try {
+			Statement stmt = connection.createStatement();
+			String getQuery = "SELECT * FROM APPARTEMENTS WHERE Id = \'"+ idAppart + "\';";
+			ResultSet rs;
+			rs = stmt.executeQuery(getQuery);
+			while(rs.next())		{
+		         String idOwner = rs.getString("IdOwner");
+		         String desc = rs.getString("Description");
+		         double price = rs.getDouble("Price");
+		         double soldPrice = rs.getDouble("SoldPrice");
+		         boolean isSold = rs.getBoolean("IsSold");
+		         String adress = rs.getString("Adress");
+		         int t = rs.getInt("Type");
+		         Type type = Type.values()[t];
+		         Apartment appart = new Apartment(type, idAppart, idOwner, desc, price, soldPrice, isSold, adress);
+		         return appart;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void updateSoldAppart(Double prix, int idAppart) {
+		try
+		{
+			String req = "UPDATE APPARTEMENT set soldPrice =";
+			req += Double.toString(prix);
+			req += "AND isSold = true WHERE id= "+idAppart;
+
+			Statement stat = connection.createStatement();
+			stat.executeUpdate(req);
+			stat.close();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
