@@ -14,7 +14,10 @@ import objects.Type;
 
 public class MiseEnVenteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		HttpSession laSession = request.getSession(true);
+		try{
+			System.out.println("lalalal");
+			HttpSession laSession = request.getSession(true);
+		
 		Account proprio = (Account) laSession.getAttribute("Account");
 		String adresse = request.getParameter("adresse");
 		Double prix = Double.parseDouble(request.getParameter("prix"));
@@ -31,8 +34,18 @@ public class MiseEnVenteServlet extends HttpServlet {
 		else if(RBtype.equals("T3"))
 				type = Type.T3;
 		
-		Apartment appart = new Apartment(type, proprio.getId(), desc,  prix,  adresse);
-		Database.addApartment(appart);
-		request.getRequestDispatcher("vosApparts.jsp").forward(request, response);
+		if(proprio != null){
+			
+			Apartment appart = new Apartment(type, proprio.getId(), desc,  prix,  adresse);
+			Database.addApartment(appart);
+			String ret ="La vente de votre "+RBtype+" à bien été enregistré au numéro "+appart.getId();
+			System.out.println(ret);
+			request.setAttribute("retour", ret);
+			request.getRequestDispatcher("vosApparts.jsp").forward(request, response);
+		}
+		}
+		catch{
+			System.out.println("blabla");
+		}
 	}
 }

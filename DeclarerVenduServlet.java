@@ -27,23 +27,6 @@ public class DeclarerVenduServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		/*PrintWriter out;
-		try {
-			out = response.getWriter();
-			HttpSession laSession = request.getSession(true);
-			Account compte = (Account) laSession.getAttribute("Account");
-			out.println(request.getParameter("idAppart"));
-			int idAppart= Integer.parseInt(request.getParameter("idAppart"));
-			
-			laSession.setAttribute("IdAppartVendu", idAppart);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
 	}
 
 }

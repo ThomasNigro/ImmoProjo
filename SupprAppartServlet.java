@@ -14,8 +14,11 @@ public class SupprAppartServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		int idAppart = Integer.parseInt(request.getParameter("idAppart"));
-		System.out.println(idAppart);
-		Database.delApartment(idAppart);
-		request.getRequestDispatcher("vosApparts.jsp").forward(request, response);
+		HttpSession laSession = request.getSession(true);
+		Account compte = (Account) laSession.getAttribute("Account");
+		if(compte != null){
+			Database.delApartment(idAppart);
+			request.getRequestDispatcher("vosApparts.jsp").forward(request, response);
+		}
 	}
 }
