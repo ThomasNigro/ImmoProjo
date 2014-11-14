@@ -2,31 +2,48 @@ package datarepositories;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
+import objects.Account;
+import objects.Type;
 import objects.Apartment;
 
-public class database
+
+public class Database
 {
-	private String DBPath = "Chemin aux base de donnée SQLite";
-	private Connection connection = null;
+	public static  String DBPath = "Chemin aux base de donnée SQLite";
+	private static Connection connection = null;
+	/*private static ArrayList<Statement> stats = new ArrayList<Statement>();
+	static {
+		try {
+			Statement stat= connection.createStatement();
+			stats.add(stat);
+			
+		} catch (SQLException e) {
+			// problème, on arrête le serveur
+			System.out.println(e);
+			System.exit(1);
+		}
+	}*/
 
 
-	public database(String dBPath)
+	public Database(String dBPath)
 	{
-		DBPath = dBPath;
+		Database.connect(dBPath);
+		Database.createTables();
 	}
 
-	public void connect()
+	public static void connect(String dBPath)
 	{
+		DBPath=dBPath;
 		try
 		{
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + DBPath);
-			Statement statement = connection.createStatement();
+			//Statement statement = connection.createStatement();
 			System.out.println("Connexion a " + DBPath + " avec succès");
 		} catch (ClassNotFoundException notFoundException)
 		{
@@ -39,7 +56,7 @@ public class database
 		}
 	}
 
-	public void createTables()
+	public static void createTables()
 	{
 		String ownersStatement = "";
 		ownersStatement += "CREATE TABLE PROPRIETAIRES ( ";
@@ -54,97 +71,110 @@ public class database
 		apartmentsStatement += "OwnerId TEXT NOT NULL, ";
 		apartmentsStatement += "Description TEXT, ";
 		apartmentsStatement += "Price REAL NOT NULL, ";
-		apartmentsStatement += "OldPrice REAL, ";
-		apartmentsStatement += "IsSold BOOLEAN, ";
+		apartmentsStatement += "SoldPrice REAL, ";
+		apartmentsStatement += "IsSold INTEGER, ";
 		apartmentsStatement += "Adress CHAR(50) NOT NULL,";
 		apartmentsStatement += "Type INTEGER NOT NULL ";
 		apartmentsStatement += ");";
-		try
-		{
+		try{
 			Statement ownStat = connection.createStatement();
-			ownStat.executeUpdate(ownersStatement);
-			ownStat.close();
+			synchronized(ownStat){
+				ownStat.executeUpdate(ownersStatement);
+				ownStat.close();
+			}
 
 			Statement flatStat = connection.createStatement();
-			flatStat.executeUpdate(apartmentsStatement);
-			flatStat.close();
-		} catch (SQLException e)
-		{
+			synchronized(flatStat){
+				flatStat.executeUpdate(apartmentsStatement);
+				System.out.println("table appart créé");
+				flatStat.close();
+			}
+		} catch (SQLException e){
+			System.out.println("Erreur creation de table");
 		}
 	}
 
-	public ResultSet query(String request)
+	public static ResultSet query(String request)
 	{
 		ResultSet resultat = null;
 		try
 		{
 			Statement statement = connection.createStatement();
-			resultat = statement.executeQuery(request);
+			synchronized(statement){
+				resultat = statement.executeQuery(request);
+			}
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
-			System.out.println("Erreur dans la requet : " + request);
+			System.out.println("Erreur dans la requete : " + request);
 		}
 		return resultat;
 	}
-
-	public void delApartment(int idAppart, String idProprio)
-	{
+	
+	public static void update(String update){
 		try
 		{
-			String remQuery = "DELETE from APPARTEMENTS WHERE ProprioId =\'"
-					+ idProprio + "\' AND Id=\'" + idAppart + "\';";
-			Statement remApStmt = connection.createStatement();
-			remApStmt.execute(remQuery);
-			remApStmt.close();
+			Statement statement = connection.createStatement();
+			synchronized(statement){
+				statement.executeUpdate(update);
+				statement.close();
+			}
 		} catch (SQLException e)
 		{
-
-		}
-	}
-
-	public void addApartment(Apartment appart)
-	{
-		try
-		{
-			String req = "INSERT INTO APPARTEMENTS (Type, Adress,Price,IsSold, OwnerId) VALUES ( ";
-			req += Integer.toString(appart.getType().ordinal()) + ", ";
-			req += appart.getAddress() + " ,";
-			req += Double.toString(appart.getPrice())+", ";
-			req+= "'True', ";
-			req+= appart.getIdProprio()+";";
-			Statement stat = connection.createStatement();
-			stat.executeUpdate(req);
-			stat.close();
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Erreur dans l'update: " + update);
 		}
 	}
 
-	public void getApartmentByOwner(String ownerLogin)
+	public static void delApartment(int idAppart)
 	{
-		try
-		{
-			Statement stmt = connection.createStatement();
-			String getQuery = "SELECT * FROM APPARTEMENTS WHERE OwnerId = \'"
-					+ ownerLogin + "\';";
-			ResultSet rs = stmt.executeQuery(getQuery);
+		String remQuery = "DELETE FROM APPARTEMENTS WHERE Id=\'" + idAppart + "\';";
+		Database.update(remQuery);
+	}
+
+	public static void addApartment(Apartment appart)
+	{
+		String req = "INSERT INTO APPARTEMENTS (Type, Adress, Price, Description, IsSold, OwnerId) VALUES ('";
+		req += Integer.toString(appart.getType().ordinal()) + "', '";
+		req += appart.getAddress() + "' ,'";
+		req += Double.toString(appart.getPrice())+"', '";
+		req += appart.getDesc()+"', '";
+		int isSold = (appart.isSold()) ? 1 : 0;
+		req += isSold +"', '";
+		req += appart.getIdProprio()+"') ;";
+		update(req);
+	}
+
+	public static ArrayList<Apartment> getApartmentByOwner(String ownerLogin)
+	{
+		String getQuery = "SELECT * FROM APPARTEMENTS WHERE OwnerId = \'"+ ownerLogin+ "\';";
+		ResultSet rs = query(getQuery);
+		ArrayList<Apartment> apparts= new ArrayList<Apartment>();
+		try {
 			while(rs.next())
 			{
+				
 		         int id = rs.getInt("Id");
 		         String desc = rs.getString("Description");
 		         double price = rs.getDouble("Price");
 		         double soldPrice = rs.getDouble("SoldPrice");
-		         boolean isSold = rs.getBoolean("IsSold");
+		         int sold = rs.getInt("IsSold");
+		         boolean isSold =false;
+		         if(sold==0) 
+		        	 isSold=false ;
+		         else 
+		        	 isSold=true;
 		         String adress = rs.getString("Adress");
-		         int type = rs.getInt("Type");
+		         int t= rs.getInt("Type");
+		         Type type = Type.values()[t];
+		         Apartment appart = new Apartment(type, id, ownerLogin, desc, price, soldPrice, isSold, adress);
+		         apparts.add(appart);
 			}
-		} catch (SQLException e)
-		{
-
-		}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		return apparts;
 	}
 
 	public void close()
@@ -157,5 +187,99 @@ public class database
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static Apartment getAppart(int idAppart) {
+		// TODO Auto-generated method stub
+		
+		try {
+			Statement stmt = connection.createStatement();
+			synchronized (stmt){
+				String getQuery = "SELECT * FROM APPARTEMENTS WHERE Id = \'"+ idAppart + "\';";
+				ResultSet rs;
+				rs = stmt.executeQuery(getQuery);
+				if(rs!=null){
+			         String idOwner = rs.getString("OwnerId");
+			         String desc = rs.getString("Description");
+			         double price = rs.getDouble("Price");
+			         double soldPrice = rs.getDouble("SoldPrice");
+			         int sold = rs.getInt("IsSold");
+			         boolean isSold =false;
+			         if(sold==0) 
+			        	 isSold=false ;
+			         else 
+			        	 isSold=true;
+			         String adress = rs.getString("Adress");
+			         int t = rs.getInt("Type");
+			         Type type = Type.values()[t];
+			         Apartment appart = new Apartment(type, idAppart, idOwner, desc, price, soldPrice, isSold, adress);
+			         stmt.close();
+			         return appart;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static void updateSoldAppart(Double prix, int idAppart) {
+			String req1 = "UPDATE APPARTEMENTS SET SoldPrice = '";
+			req1 += prix.toString();
+			req1 += "' WHERE id= '"+idAppart+"';";
+			System.out.println(req1);
+			String req2 = "UPDATE APPARTEMENTS SET IsSold = '1'";
+			req2 += " WHERE id= '"+idAppart+"';";
+			update(req1);
+			update(req2);
+			System.out.println("Mise a jour prixVente OK");
+	}
+	
+	private static void addProprio(String name, String login, String password){
+		try
+		{
+			Statement statement = connection.createStatement();
+			synchronized(statement){
+				String update = "INSERT INTO PROPRIETAIRES (Nom, Login, Mdp) VALUES ('"+ name +"' ,'"+login+"' ,'"+password+"');";
+				statement.executeUpdate(update);
+				statement.close();
+			}
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}	
+	}
+
+	public static void addCompte(Account account) {
+		addProprio(account.getName(), account.getLogin(), account.getPassword());
+	}
+	
+	public static ArrayList<Apartment> getAppartsByType(Type t){
+		String getQuery = "SELECT * FROM APPARTEMENTS WHERE NOT IsSold AND Type= "+Integer.toString(t.ordinal())+";";
+		ResultSet rs = query(getQuery);
+		ArrayList<Apartment> apparts= new ArrayList<Apartment>();
+		try {
+			while(rs.next()){
+				 int idAppart=rs.getInt("Id");
+		         String idOwner = rs.getString("OwnerId");
+		         String desc = rs.getString("Description");
+		         double price = rs.getDouble("Price");
+		         double soldPrice = rs.getDouble("SoldPrice");
+		         int sold = rs.getInt("IsSold");
+		         boolean isSold =false;
+		         if(sold==0) 
+		        	 isSold=false ;
+		         else 
+		        	 isSold=true;
+		         String adress = rs.getString("Adress");
+		         Apartment appart = new Apartment(t, idAppart, idOwner, desc, price, soldPrice, isSold, adress);
+		         apparts.add(appart);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return apparts;
 	}
 }

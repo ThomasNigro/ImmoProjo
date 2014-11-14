@@ -16,9 +16,29 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>T1.jsp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/T1.jsp</locationURI>
+		</link>
+		<link>
+			<name>T2.jsp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/T2.jsp</locationURI>
+		</link>
+		<link>
 			<name>annonce.jsp</name>
 			<type>1</type>
 			<locationURI>copy_PARENT/annonce.jsp</locationURI>
+		</link>
+		<link>
+			<name>index.jsp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/index.jsp</locationURI>
+		</link>
+		<link>
+			<name>inscription.jsp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/inscription.jsp</locationURI>
 		</link>
 		<link>
 			<name>login.jsp</name>
@@ -26,9 +46,24 @@
 			<locationURI>copy_PARENT/login.jsp</locationURI>
 		</link>
 		<link>
+			<name>recherche_par_num.jsp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/recherche_par_num.jsp</locationURI>
+		</link>
+		<link>
 			<name>studio.jsp</name>
 			<type>1</type>
 			<locationURI>copy_PARENT/studio.jsp</locationURI>
+		</link>
+		<link>
+			<name>vendre.jsp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/vendre.jsp</locationURI>
+		</link>
+		<link>
+			<name>vendu.jsp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT/vendu.jsp</locationURI>
 		</link>
 		<link>
 			<name>vosApparts.jsp</name>

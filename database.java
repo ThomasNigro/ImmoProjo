@@ -6,14 +6,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
-import objects.Apartment;
 import objects.Type;
+import objects.Apartment;
 
+@SuppressWarnings("deprecation")
 public class database
 {
 	private String DBPath = "Chemin aux base de donnée SQLite";
 	private Connection connection = null;
+	
 
 
 	public database(String dBPath)
@@ -112,7 +115,7 @@ public class database
 			req += Integer.toString(appart.getType().ordinal()) + ", ";
 			req += appart.getAddress() + " ,";
 			req += Double.toString(appart.getPrice())+", ";
-			req+= "'True', ";
+			req+= appart.isSold()+", ";
 			req+= appart.getIdProprio()+";";
 			Statement stat = connection.createStatement();
 			stat.executeUpdate(req);
@@ -124,7 +127,7 @@ public class database
 		}
 	}
 
-	public void getApartmentByOwner(String ownerLogin)
+	public ArrayList<Apartment> getApartmentByOwner(String ownerLogin)
 	{
 		try
 		{
@@ -132,6 +135,7 @@ public class database
 			String getQuery = "SELECT * FROM APPARTEMENTS WHERE OwnerId = \'"
 					+ ownerLogin + "\';";
 			ResultSet rs = stmt.executeQuery(getQuery);
+			ArrayList<Apartment> apparts= new ArrayList<Apartment>();
 			while(rs.next())
 			{
 		         int id = rs.getInt("Id");
@@ -140,12 +144,17 @@ public class database
 		         double soldPrice = rs.getDouble("SoldPrice");
 		         boolean isSold = rs.getBoolean("IsSold");
 		         String adress = rs.getString("Adress");
-		         int type = rs.getInt("Type");
+		         int t= rs.getInt("Type");
+		         Type type = Type.values()[t];
+		         Apartment appart = new Apartment(type, id, ownerLogin, desc, price, soldPrice, isSold, adress);
+		         apparts.add(appart);
 			}
+			return apparts;
 		} catch (SQLException e)
 		{
 
 		}
+		return null;
 	}
 
 	public void close()
@@ -159,7 +168,7 @@ public class database
 			e.printStackTrace();
 		}
 	}
-
+	
 	public Apartment getAppart(int idAppart) {
 		// TODO Auto-generated method stub
 		
